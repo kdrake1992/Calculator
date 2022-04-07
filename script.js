@@ -3,9 +3,17 @@
 const buttons = document.querySelectorAll('.buttons');
 const screen = document.querySelector('.screen');
 const clear = document.getElementById('clear');
+let numHolder = new Array(3);
+let answer = 0;
+let hasCalc = 0 ;
 
 const clearScreen = function(screen) {
-    screen.innerHTML = '';
+    screen.innerHTML = '0';
+}
+
+const arrayToString = function(equation) {
+    return equation.join('');
+    
 }
 
 const add = function(num1, num2) {
@@ -24,7 +32,10 @@ const divide = function(num1, num2) {
     return num1 / num2;
 }
 
-const operate = function(num) {
+const operate = function(equation) {
+    let num = equation.join('');
+    console.log(num);
+
     if(num.includes('+')) {
         let nums = num.split('+').map(Number);
         return(add(nums[0],nums[1]))
@@ -48,16 +59,68 @@ const operate = function(num) {
 
 clearScreen(screen);
 
+
 buttons.forEach((button) => {
+
     button.addEventListener('click', event => {
 
         if(event.target.innerHTML === '=') {
-            screen.innerHTML = (operate(screen.innerHTML));
+            numHolder[2] = answer;
+            screen.innerHTML = (operate(numHolder));
+
         }
         else {
             if(screen.innerHTML.length <= 23) {
-                screen.innerHTML += event.target.innerHTML;
-                console.log(screen.innerHTML.length)
+                if(screen.innerHTML === '0') {
+                    answer = event.target.innerHTML;
+                    screen.innerHTML = answer;
+                    hasCalc = 0;
+
+                }
+                else {
+                    if(event.target.innerHTML === '+' || 
+                        event.target.innerHTML === '-' || 
+                        event.target.innerHTML === 'x' || 
+                        event.target.innerHTML === '÷') {
+                        
+                        if(hasCalc === 0) {
+                            numHolder[0] = answer;
+                            numHolder[1] = event.target.innerHTML;
+
+                            answer = '';
+                            hasCalc++;
+                        }
+
+
+                        else if(hasCalc == 1) {
+                            screen.innerHTML = event.target.innerHTML;
+                            hasCalc++;
+
+                        }
+
+                        else if (hasCalc ==  2) {
+                            answer += event.target.innerHTML;
+                            screen.innerHTML += event.target.innerHTML;
+                            hasCalc++;
+                        }
+
+                        else if(hasCalc == 3) {
+                            numHolder[2] = event.target.innerHTML;
+                            current = operate(numHolder);
+
+                            hasCalc = hasCalc - 2;
+                            answer = 0;
+                            screen.innerHTML = current;
+                        }
+                    }
+
+                    else {
+                        answer += event.target.innerHTML;
+                        screen.innerHTML = answer;
+
+                    }
+
+                }
             }
             else {
                 screen.innerHTML = "ERROR! NUMBER TOO LARGE!";
@@ -67,5 +130,6 @@ buttons.forEach((button) => {
 });
 
 clear.addEventListener('click', event => {
+    answer = 0;
     clearScreen(screen);
 })

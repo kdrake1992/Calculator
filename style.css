@@ -28,7 +28,7 @@ body {
     font-weight: bold;
     padding: 20px 5px;
     background-color: antiquewhite;
-    border: 3px solid black;
+    border: 1px solid black;
 }
 
 .topButtons {
@@ -43,7 +43,7 @@ body {
     flex: 1 1 0;
 }
 
-.buttons {
+.buttons{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     text-align: center;
