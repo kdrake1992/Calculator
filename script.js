@@ -9,6 +9,9 @@ let hasCalc = 0 ;
 
 const clearScreen = function(screen) {
     screen.innerHTML = '0';
+    hasCalc = 0;
+    answer = '';
+    numHolder = [];
 }
 
 const arrayToString = function(equation) {
@@ -65,8 +68,14 @@ buttons.forEach((button) => {
     button.addEventListener('click', event => {
 
         if(event.target.innerHTML === '=') {
-            numHolder[2] = answer;
-            screen.innerHTML = (operate(numHolder));
+            if(numHolder.length == 2) {
+                numHolder[2] = answer;
+                screen.innerHTML = (operate(numHolder));
+            }
+            else {
+                screen.innerHTML = 'ERROR';
+            }
+
 
         }
         else {
@@ -83,34 +92,20 @@ buttons.forEach((button) => {
                         event.target.innerHTML === 'x' || 
                         event.target.innerHTML === '÷') {
                         
-                        if(hasCalc === 0) {
+                        if(hasCalc == 0) {
                             numHolder[0] = answer;
                             numHolder[1] = event.target.innerHTML;
-
                             answer = '';
                             hasCalc++;
                         }
 
 
                         else if(hasCalc == 1) {
-                            screen.innerHTML = event.target.innerHTML;
-                            hasCalc++;
-
-                        }
-
-                        else if (hasCalc ==  2) {
-                            answer += event.target.innerHTML;
-                            screen.innerHTML += event.target.innerHTML;
-                            hasCalc++;
-                        }
-
-                        else if(hasCalc == 3) {
-                            numHolder[2] = event.target.innerHTML;
-                            current = operate(numHolder);
-
-                            hasCalc = hasCalc - 2;
-                            answer = 0;
-                            screen.innerHTML = current;
+                            numHolder[2] = answer;
+                            screen.innerHTML = (operate(numHolder));
+                            numHolder[0] = screen.innerHTML;
+                            numHolder[1] = event.target.innerHTML;
+                            answer = '';
                         }
                     }
 
@@ -130,6 +125,5 @@ buttons.forEach((button) => {
 });
 
 clear.addEventListener('click', event => {
-    answer = 0;
     clearScreen(screen);
 })
