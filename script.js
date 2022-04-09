@@ -3,11 +3,13 @@
 const buttons = document.querySelectorAll('.buttons');
 const screen = document.querySelector('.screen');
 const clear = document.getElementById('clear');
+const backspace = document.getElementById('backspace');
 
 let numHolder = new Array(3);
 let answer = 0;
 let hasCalc = 0 ;
 let hasDecimal = false;
+let justAns = false;
 
 // Clears screen and resets attributes.
 const clearScreen = function(screen) {
@@ -27,9 +29,9 @@ const clearAttributes = function() {
 }
 
 // Rounds number if too big
-const rounder = function(answer) {
-    return Number(Math.round(answer + "e" + 23) + "e-" + 23); 
-}
+// const rounder = function(answer) {
+//     return Number(Math.round(answer + "e" + 23) + "e-" + 23); 
+// }
 
 // Basic arithmetic functions, takes in 2 numbers.
 const add = function(num1, num2) {
@@ -91,16 +93,19 @@ buttons.forEach((button) => {
 
         // Checks to see if user presses =
         if(event.target.innerHTML === '=') {
-            if(numHolder.length == 2) {
+            if(numHolder.length == 2 || numHolder.length == 3) {
                 numHolder[2] = answer;
 
                 if(numHolder[2] === '') {
-                    console.log('hello');
                     screen.innerHTML = 'ERROR';
                     clearAttributes();
                 }
                 else {
                     screen.innerHTML = (operate(numHolder));
+                    numHolder[0] = screen.innerHTML;
+                    answer = screen.innerHTML;
+                    hasCalc--;
+                    justAns = true;
 
                 }
 
@@ -122,6 +127,7 @@ buttons.forEach((button) => {
                     answer = event.target.innerHTML;
                     screen.innerHTML = answer;
                     hasCalc = 0;
+                    hasDecimal = false;
 
                 }
                 else {
@@ -164,8 +170,17 @@ buttons.forEach((button) => {
                             //DO nothing if already one decimal
                         }
                         else {
-                            answer += event.target.innerHTML;
-                            screen.innerHTML = answer;
+                            if(justAns === true) {
+                                answer = event.target.innerHTML;
+                                screen.innerHTML = answer;
+                                justAns = false;
+                            }
+                            else {
+                                answer += event.target.innerHTML;
+                                screen.innerHTML = answer;
+
+                            }
+
                         }
                     }
 
@@ -173,6 +188,7 @@ buttons.forEach((button) => {
             }
             else {
                 screen.innerHTML = "ERROR! NUMBER TOO LARGE!";
+                clearAttributes();
             }
         }
     })
@@ -181,4 +197,19 @@ buttons.forEach((button) => {
 // clears screen once the clear button is pressed
 clear.addEventListener('click', event => {
     clearScreen(screen);
+})
+
+// goes back a space
+backspace.addEventListener('click', event => {
+    let fixedScreen = screen.innerHTML.slice(0, screen.innerHTML.length -1);
+
+    if(fixedScreen === '') {
+        screen.innerHTML = '0';
+        answer = screen.innerHTML;
+    }
+    else {
+        screen.innerHTML = fixedScreen;
+        answer = screen.innerHTML;
+    
+    }
 })
