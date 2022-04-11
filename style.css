@@ -14,32 +14,54 @@ body {
 }
 
 .calculator {
+    width: 350px;
+
     display: flex;
-    width: 300px;
     flex-direction: column;
     align-items: stretch;
+
     border: solid black 10px;
+    border-radius: 10px;
     margin-top: 100px;
+
 }
 
 .screen {
     height: 30px;
-    font-size: 20px;
+    font-size: 23px;
     font-weight: bold;
     padding: 20px 5px;
     background-color: antiquewhite;
-    border: 1px solid black;
+    border: 0px 1px solid black;
+    border-bottom: 3px solid black;
 }
 
 .topButtons {
     display: flex;
 }
 
-.topButtons div {
+button {
+    font-size: 17px;
+    background-color: rgb(216,216,216);
+
+    padding: 15px;
+    margin: 5px;
+
+    border: solid black 2px;
+    border-radius: 5px;
+
+    cursor: pointer;
+    transition: 0.2s all;
+    box-shadow: 5px 10px 25px 5px rgba(0, 0, 0, 0.10);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.topButtons button {
     align-items: center;
     text-align: center;
-    padding: 20px;
-    border: solid black 1px;
     flex: 1 1 0;
 }
 
@@ -49,8 +71,17 @@ body {
     text-align: center;
 }
 
-.buttons div {
-    border: solid black 1px;
+.buttons button {
     align-items: center;
-    padding: 20px;
+}
+
+#number {
+    color: white;
+    background-color: rgb(96,96,96);
+}
+
+#operator {
+    font-size: 25px;
+    color: white;
+    background-color: orange;
 }

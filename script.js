@@ -3,13 +3,14 @@
 const buttons = document.querySelectorAll('.buttons');
 const screen = document.querySelector('.screen');
 const clear = document.getElementById('clear');
-const backspace = document.getElementById('backspace');
+const backspace = document.getElementById('del');
 
 let numHolder = new Array(3);
 let answer = 0;
 let hasCalc = 0 ;
 let hasDecimal = false;
 let justAns = false;
+let cannotBack = false;
 
 // Clears screen and resets attributes.
 const clearScreen = function(screen) {
@@ -18,6 +19,7 @@ const clearScreen = function(screen) {
     answer = '';
     numHolder = [];
     hasDecimal = false;
+    cannotBack = false;
 }
 
 // Clears attributes not screen.
@@ -28,12 +30,6 @@ const clearAttributes = function() {
     hasDecimal = false;
 }
 
-// Rounds number if too big
-// const rounder = function(answer) {
-//     return Number(Math.round(answer + "e" + 23) + "e-" + 23); 
-// }
-
-// Basic arithmetic functions, takes in 2 numbers.
 const add = function(num1, num2) {
     return num1 + num2;
 }
@@ -54,7 +50,6 @@ const divide = function(num1, num2) {
 // and then sends a string to arithmetic functions which it returns
 const operate = function(equation) {
     let num = equation.join('');
-    console.log(num);
 
     if(num.includes('+')) {
         let nums = num.split('+').map(Number);
@@ -74,6 +69,7 @@ const operate = function(equation) {
     else if (num.includes('÷')){
         let nums = num.split('÷').map(Number);
         if(nums[0] === 0 || nums[1] === 0) {
+            cannotBack = true;
             return 'ERROR! CANNOT DIVIDE 0!'
         }
         else {
@@ -89,7 +85,7 @@ clearScreen(screen);
 // Button listeners
 buttons.forEach((button) => {
 
-    button.addEventListener('click', event => {
+    button.addEventListener('mousedown', event => {
 
         // Checks to see if user presses =
         if(event.target.innerHTML === '=') {
@@ -98,6 +94,7 @@ buttons.forEach((button) => {
 
                 if(numHolder[2] === '') {
                     screen.innerHTML = 'ERROR';
+                    cannotBack = true;
                     clearAttributes();
                 }
                 else {
@@ -112,6 +109,7 @@ buttons.forEach((button) => {
             }
             else {
                 screen.innerHTML = 'ERROR';
+                cannotBack = true;
                 clearAttributes();
             }
 
@@ -119,7 +117,7 @@ buttons.forEach((button) => {
         }
 
         else {
-
+            
             // If there are over 23 characters, itll say error
             // will fix later to rounding
             if(screen.innerHTML.length <= 23) {
@@ -138,7 +136,11 @@ buttons.forEach((button) => {
                         event.target.innerHTML === 'x' || 
                         event.target.innerHTML === '÷') {
                         
-                        if(hasCalc == 0) {
+                        if(screen.innerHTML.length === 0) {
+                            // Do nothing
+                        }    
+
+                        else if(hasCalc == 0) {
                             numHolder[0] = answer;
                             numHolder[1] = event.target.innerHTML;
                             answer = '';
@@ -188,6 +190,7 @@ buttons.forEach((button) => {
             }
             else {
                 screen.innerHTML = "ERROR! NUMBER TOO LARGE!";
+                cannotBack = true;
                 clearAttributes();
             }
         }
@@ -195,21 +198,23 @@ buttons.forEach((button) => {
 });
 
 // clears screen once the clear button is pressed
-clear.addEventListener('click', event => {
+clear.addEventListener('mousedown', event => {
     clearScreen(screen);
 })
 
 // goes back a space
-backspace.addEventListener('click', event => {
-    let fixedScreen = screen.innerHTML.slice(0, screen.innerHTML.length -1);
+backspace.addEventListener('mousedown', event => {
 
-    if(fixedScreen === '') {
-        screen.innerHTML = '0';
-        answer = screen.innerHTML;
-    }
-    else {
-        screen.innerHTML = fixedScreen;
-        answer = screen.innerHTML;
-    
+    if(cannotBack === false) {
+        let fixedScreen = screen.innerHTML.slice(0, screen.innerHTML.length -1);
+
+        if(fixedScreen === '') {
+            screen.innerHTML = '0';
+            answer = screen.innerHTML;
+        }
+        else {
+            screen.innerHTML = fixedScreen;
+            answer = screen.innerHTML;
+        }
     }
 })
