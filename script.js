@@ -4,6 +4,7 @@ const buttons = document.querySelectorAll('.buttons');
 const screen = document.querySelector('.screen');
 const clear = document.getElementById('clear');
 const backspace = document.getElementById('del');
+const posNeg = document.getElementById('posNeg');
 
 let numHolder = new Array(3);
 let answer = 0;
@@ -216,5 +217,26 @@ backspace.addEventListener('mousedown', event => {
             screen.innerHTML = fixedScreen;
             answer = screen.innerHTML;
         }
+    }
+})
+
+posNeg.addEventListener('mousedown', event => {
+
+    if(screen.innerHTML.includes('-')) {
+        let pos = screen.innerHTML.replace('-', '');
+        screen.innerHTML = pos;
+        answer = pos;
+    }
+    else {
+        if(screen.innerHTML === '0') {
+            //Do nothing
+        }
+        
+        else {
+            let neg = '-'
+            screen.innerHTML = neg.concat(screen.innerHTML);
+            answer = screen.innerHTML;
+        }
+
     }
 })
