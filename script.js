@@ -86,7 +86,7 @@ clearScreen(screen);
 // Button listeners
 buttons.forEach((button) => {
 
-    button.addEventListener('mousedown', event => {
+    button.addEventListener('click', event => {
 
         if(event.target.innerHTML.includes("button id")) {
             //Do nothing
@@ -204,12 +204,12 @@ buttons.forEach((button) => {
 });
 
 // clears screen once the clear button is pressed
-clear.addEventListener('mousedown', event => {
+clear.addEventListener('click', event => {
     clearScreen(screen);
 })
 
 // goes back a space
-backspace.addEventListener('mousedown', event => {
+backspace.addEventListener('click', event => {
 
     if(cannotBack === false) {
         let fixedScreen = screen.innerHTML.slice(0, screen.innerHTML.length -1);
@@ -225,7 +225,7 @@ backspace.addEventListener('mousedown', event => {
     }
 })
 
-posNeg.addEventListener('mousedown', event => {
+posNeg.addEventListener('click', event => {
 
     if(screen.innerHTML.includes('-')) {
         let pos = screen.innerHTML.replace('-', '');
