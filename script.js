@@ -88,8 +88,11 @@ buttons.forEach((button) => {
 
     button.addEventListener('mousedown', event => {
 
+        if(event.target.innerHTML.includes("button id")) {
+            //Do nothing
+        }
         // Checks to see if user presses =
-        if(event.target.innerHTML === '=') {
+        else if(event.target.innerHTML === '=') {
             if(numHolder.length == 2 || numHolder.length == 3) {
                 numHolder[2] = answer;
 
@@ -114,7 +117,6 @@ buttons.forEach((button) => {
                 clearAttributes();
             }
 
-
         }
 
         else {
@@ -123,10 +125,17 @@ buttons.forEach((button) => {
             // will fix later to rounding
             if(screen.innerHTML.length <= 23) {
                 if(screen.innerHTML === '0') {
-                    answer = event.target.innerHTML;
-                    screen.innerHTML = answer;
-                    hasCalc = 0;
-                    hasDecimal = false;
+                    if(event.target.innerHTML === '+' || 
+                    event.target.innerHTML === 'x' || 
+                    event.target.innerHTML === '÷') {
+                        // Do nothing
+                    }
+                    else {
+                        answer = event.target.innerHTML;
+                        screen.innerHTML = answer;
+                        hasCalc = 0;
+                        hasDecimal = false;
+                    }
 
                 }
                 else {
@@ -137,17 +146,12 @@ buttons.forEach((button) => {
                         event.target.innerHTML === 'x' || 
                         event.target.innerHTML === '÷') {
                         
-                        if(screen.innerHTML.length === 0) {
-                            // Do nothing
-                        }    
-
-                        else if(hasCalc == 0) {
+                        if(hasCalc == 0) {
                             numHolder[0] = answer;
                             numHolder[1] = event.target.innerHTML;
                             answer = '';
                             hasDecimal = false;
                             hasCalc++;
-
                         }
 
                         // operates the previous two numbers
@@ -196,6 +200,7 @@ buttons.forEach((button) => {
             }
         }
     })
+
 });
 
 // clears screen once the clear button is pressed
